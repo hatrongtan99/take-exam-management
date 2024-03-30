@@ -1,0 +1,27 @@
+version: "3.1"
+
+services:
+    api-service:
+        platform: linux/x86_64
+        build:
+            context: ./taskExamApi
+        ports:
+            - 8080:8080
+        depends_on:
+            - db-service
+
+    db-service:
+        image: mysql:8.2.0
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 12345678
+        ports:
+            - 3306:3306
+        volumes:
+            - mysql:/var/lib/mysql
+            - ./init:/docker-entrypoint-initdb.d
+volumes:
+    mysql:
+networks:
+    taskExam:
+        driver: bridge
